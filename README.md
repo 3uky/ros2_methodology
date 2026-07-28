@@ -1,31 +1,32 @@
 # ros2_methodology
 
-tested on Kilted Kaiju version
+## how to start
+### learning sources
 
-## how to start ros2 environment
-### instalation
+- Main source is [official ros2 documentaiton](https://docs.ros.org/en/lyrical/index.html)
+- This is link to [Robotogeddon youtube tutorial](https://www.youtube.com/watch?v=QfFnljTrRlQ&list=PLNw2RD-1J5YZbyWXCpas9zPJldfphPi4Q&index=1&pp=iAQB)
 
-### Run ros2 docker instance
+### instalation and ros2 execution with docker
 ```bash
 #!/bin/bash
 # Grant docker container access to x server
 xhost +local:docker
 
-# Run ROS2 container with X11 forwarding
+# Run ROS2 container with X11 forwarding, docker image is created from open-source robotic foundation source if it's first run
 docker run -it \
   --env DISPLAY=$DISPLAY \
   --env QT_X11_NO_MITSHM=1 \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
-  osrf/ros:kilted-desktop-full bash
+  osrf/ros:lyrical-desktop-full bash
 
 # After container end return previous access 
 xhost -local:docker
 
 # in instance init ros2 environment (you can access ros2 commands)
-source /opt/ros/kilted/setup.bash
+source /opt/ros/lyrical/setup.bash
 ```
 
-### packages
+### package commands
 
 ```bash
 # list available packages
