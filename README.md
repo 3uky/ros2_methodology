@@ -5,22 +5,23 @@ tested on Kilted Kaiju version
 ## how to start ros2 environment
 ### instalation
 
-### docker instance
-
-
+### Run ros2 docker instance
 ```bash
-# run docker image instance with graphic setup (needed for gazebo)
+#!/bin/bash
+# Grant docker container access to x server
 xhost +local:docker
+
+# Run ROS2 container with X11 forwarding
 docker run -it \
   --env DISPLAY=$DISPLAY \
   --env QT_X11_NO_MITSHM=1 \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
   osrf/ros:kilted-desktop-full bash
 
-# start image
-docker run -it osrf/ros:kilted-desktop-full
+# After container end return previous access 
+xhost -local:docker
 
-# init environment
+# in instance init ros2 environment (you can access ros2 commands)
 source /opt/ros/kilted/setup.bash
 ```
 
