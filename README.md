@@ -6,18 +6,44 @@
 - Main source is [official ros2 documentaiton](https://docs.ros.org/en/lyrical/index.html)
 - This is link to [Robotogeddon youtube tutorial](https://www.youtube.com/watch?v=QfFnljTrRlQ&list=PLNw2RD-1J5YZbyWXCpas9zPJldfphPi4Q&index=1&pp=iAQB)
  - ros2 docker images [osrf/docker_images](https://github.com/osrf/docker_images)
-### instalation and ros2 execution with docker
+### instalation and execution with docker
+
+#### dockerfile with image configuration
+```bash
+# Dockerfile.lyrical-custom
+
+FROM osrf/ros:lyrical-desktop-full
+
+RUN apt-get update && \
+    apt-get install -y tmux && \
+    rm -rf /var/lib/apt/lists/*
+```
+
+#### runros.sh for automated image creation and container execution
 ```bash
 #!/bin/bash
+
+set -e
+
+IMAGE="ros:lyrical-custom"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DOCKERFILE="$SCRIPT_DIR/Dockerfile.lyrical-custom"
+
+# Build image if it doesn't exist
+if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
+    echo "Docker image '$IMAGE' not found. Building..."
+    docker build -f "$DOCKERFILE" -t "$IMAGE" "$SCRIPT_DIR"
+fi
+
 # Grant docker container access to x server
 xhost +local:docker
 
-# Run ROS2 container with X11 forwarding, docker image is created from open-source robotic foundation source if it's first run
-docker run -it \
+# Run ROS2 container with X11 forwarding
+docker run --rm -it \
   --env DISPLAY=$DISPLAY \
   --env QT_X11_NO_MITSHM=1 \
   --volume /tmp/.X11-unix:/tmp/.X11-unix \
-  osrf/ros:lyrical-desktop-full bash
+  "$IMAGE" bash
 
 # After container end return previous access 
 xhost -local:docker
@@ -26,7 +52,13 @@ xhost -local:docker
 source /opt/ros/lyrical/setup.bash
 ```
 
-### package commands
+#### usage
+```bash
+chmod +x ./scripts/runros.sh
+./scripts/runros.sh
+```
+
+## Basic Commands
 
 ```bash
 # list available packages
@@ -46,13 +78,22 @@ ros2 run examples_rclcpp_minimal_subscriber subscriber_lambda
 # check running nodes
 ros2 node list
 
+# check info about node (subscriber/publisher relate to topic)
+ros2 node info /turtlesim
+
 # changing node properties
 ros2 run demo_nodes_cpp talker --ros-args -r __node:=abed -r __ns:=/abed -r chatter:=abed 
 
 # run turtlesim
 ros2 run turtlesim turtlesim_node
 ros2 run turtlesim turtle_teleop_key
+
+# show graph with communication
 rqt_graph
+rqt --standalone rqt_graph
+
+# duplicate and mimic node
+ros2 run turtlesim mimic
 ```
 
 ### Communication between nodes:
