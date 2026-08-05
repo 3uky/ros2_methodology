@@ -183,6 +183,25 @@ ros2 pkg list
 ros2 pkg executables
 ```
 
+#### examples
+```bash
+# prepare workspace
+mkdir -p ~/ros2_ws/src
+cd ~/ros2_ws
+
+# download examples from github
+git clone https://github.com/ros2/examples src/examples -b lyrical
+
+# build all packages in worksapce
+colcon build --symlink-install
+
+# test
+colcon test
+
+# run some package node
+ros2 run examples_rclcpp_minimal_publisher publisher_lambda
+```
+
 ### params 
 Configurable parameter for specific node.
 
