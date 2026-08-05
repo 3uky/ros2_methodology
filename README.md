@@ -58,15 +58,6 @@ chmod +x ./scripts/runros.sh
 ./scripts/runros.sh
 ```
 
-## Basic Commands
-
-```bash
-# list available packages
-ros2 pkg --help
-ros2 pkg list
-ros2 pkg executables
-```
-
 ## Nodes
 Nodes are objects of communication.
 
@@ -178,9 +169,22 @@ ros2 action send_goal {action} {action type} {value} --feedback
 ros2 action send_goal /turtle1/rotate_absolute turtlesim_msgs action/RotateAbsolute "{theta: 3.14}" --feedback
 ```
 
-## params 
-Configurable parameter for specific node.
+## Basic Commands
 
+### packages
+ROS2 Underlay - framework with basic tools
+ROS2 Overlay - custom packages, contains src folder
+package - need defined following: CMakeList.txt, package.xml, src and include folder
+
+```bash
+# list available packages
+ros2 pkg --help
+ros2 pkg list
+ros2 pkg executables
+```
+
+### params 
+Configurable parameter for specific node.
 
 ```bash
 # list available parameter list (like background color)
@@ -197,4 +201,23 @@ ros2 param dump /turtlesim > turtlesim.yaml
 
 # load parameters during startup
 ros2 run turtlesim turtlesim_node --ros-args --params-file turtlesim.yaml
+```
+
+### bags
+Used for recording of topic messages, services, actions, etc.
+
+```bash
+# run turtlesim and teleop
+ros2 turtlesim turtlesim_node
+ros2 run turtlesim turtle_teleop_key
+ros2 topic list
+
+# record topic messages
+ros2 bag record -o dataset1 --topics /turtle1/cmd_vel /turtle/pose
+
+# show metadata information about record
+ros2 bag info dataset1
+
+# replay stored record (check turtlesim during execution)
+ros2 bag play dataset1
 ```
