@@ -172,9 +172,15 @@ ros2 action send_goal /turtle1/rotate_absolute turtlesim_msgs action/RotateAbsol
 ## Basic Commands
 
 ### packages
-ROS2 Underlay - framework with basic tools
-ROS2 Overlay - custom packages, contains src folder
-package - need defined following: CMakeList.txt, package.xml, src and include folder
+Package is a source code with node, topics, etc. logic definitions and configuration for build and installation.
+Mostly is written in c++ or python. For minimal package creation it is necessary to define just CMakeList.txt and package.xml and soucer code.
+
+#### basic architecture
+
+- ROS2 Underlay - base framework packages
+- ROS2 Overlay - custom packages
+
+####  basic commands
 
 ```bash
 # list available packages
