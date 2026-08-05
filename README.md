@@ -1,4 +1,4 @@
-# ros2_methodology
+# ros2-methodology
 
 ## how to start
 ### learning sources
